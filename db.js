@@ -10,8 +10,29 @@ db.run(`
     user_agent TEXT,
     datetime TEXT,
     ipv6 TEXT,
-    ipv4 TEXT
+    ipv4 TEXT,
+    anon_id TEXT,
+    user_name TEXT,
+    name_consent_at TEXT
   )
 `);
+
+// ensure reports table exists
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      anon_id TEXT,
+      qr_id TEXT,
+      qr_link TEXT,
+      reporter_name TEXT,
+      reporter_email TEXT,
+      description TEXT,
+      created_at TEXT
+    )
+  `, (err) => {
+    if (err) console.error('Failed to create reports table:', err.message);
+  });
+});
 
 module.exports = db;
