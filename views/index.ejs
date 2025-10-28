@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>⚠️ DANGEROUS QR WARNING</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#2b0000;
+      --bg2:#5a0000;
+      --danger:#ff2b2b;
+      --muted:#ffdede;
+      --glass: rgba(255,255,255,0.06);
+    }
+    html,body{height:100%;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+    body{
+      background: radial-gradient(ellipse at center, rgba(255,50,50,0.08) 0%, rgba(0,0,0,0.7) 60%), linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    /* Scary animated background blobs */
+    .blobs{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+    }
+    .blob{
+      position:absolute; width:60vmin; height:60vmin; border-radius:50%;
+      filter: blur(40px) saturate(140%);
+      opacity:0.27; transform:translate(-50%,-50%) scale(1);
+      animation: float 8s ease-in-out infinite;
+      mix-blend-mode:screen;
+    }
+    .b1{left:10%; top:30%; background: #ff0040;}
+    .b2{left:85%; top:70%; background: #ff6b6b; animation-duration: 11s;}
+    .b3{left:50%; top:85%; background: #ff2b2b; animation-duration: 13s;}
+    @keyframes float{0%{transform:translateY(0) }50%{transform:translateY(-6vh)}100%{transform:translateY(0)}}
+
+    /* Main card */
+    .wrap{position:relative; z-index:2; width:min(980px,94vw); margin:1rem; border-radius:14px; overflow:hidden; box-shadow:0 20px 80px rgba(0,0,0,0.6)}
+    .panel{
+      display:flex; gap:0; align-items:stretch;
+      background:linear-gradient(180deg, rgba(0,0,0,0.36), rgba(0,0,0,0.52));
+      border:3px solid rgba(255,0,0,0.18);
+    }
+
+    .left{
+      flex:1 1 420px; padding:28px 26px; background: linear-gradient(180deg, rgba(255,10,10,0.03), rgba(0,0,0,0.22));
+    }
+    .right{
+      width:420px; background: rgba(0,0,0,0.24); padding:22px; display:flex; flex-direction:column; justify-content:space-between;
+    }
+
+    h1{font-size:2.4rem; margin:0 0 8px; letter-spacing: -0.02em; color:var(--danger); text-shadow: 0 3px 18px rgba(255,43,43,0.28)}
+    .flash{display:inline-block; padding:6px 10px; border-radius:8px; background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); box-shadow: inset 0 -2px 8px rgba(0,0,0,0.2)}
+
+    .big-cta{
+      margin-top:12px; font-size:1.05rem; color:white; background:linear-gradient(90deg,var(--danger),#ff6b6b);
+      padding:12px 14px; border-radius:10px; border:none; cursor:pointer; box-shadow: 0 8px 30px rgba(255,20,20,0.15);
+      transition: transform .12s ease;
+    }
+    .big-cta:hover{ transform: translateY(-3px) scale(1.01) }
+
+    .danger-meta{ margin-top:18px; color:var(--muted); font-size:0.95rem }
+    .meta-row{ display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap }
+
+    .url-preview{
+      margin-top:14px; padding:12px; border-radius:8px; background: rgba(0,0,0,0.44); color:#ffd9d9;
+      font-family:monospace; font-size:0.95rem; backdrop-filter: blur(3px); border:1px solid rgba(255,0,0,0.06)
+    }
+
+    .count-bubble{ display:inline-block; background:rgba(255,255,255,0.06); padding:6px 10px; border-radius:999px; color:#fff; font-weight:600 }
+
+    .urgent{
+      display:flex; gap:8px; align-items:center; margin-top:14px;
+    }
+    .timer{ font-size:1.8rem; font-weight:700; color:white; background:#00000033; padding:6px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03)}
+    .row-btns{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap }
+
+    /* right side small table */
+    .info { font-size:0.95rem; color:#fff; }
+    .info .k{ color:#ffdede; font-weight:700; }
+    .report{ background:transparent; color:#ffdede; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer }
+
+    /* subtle shake on load */
+    .shock { animation:shake 0.9s ease-in-out 0s 1; }
+    @keyframes shake { 0%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(2px)} 100%{transform:translateX(0)} }
+
+    /* small devices */
+    @media(max-width:900px){
+      .panel{ flex-direction:column }
+      .right{ width:100% }
+      h1{ font-size:1.6rem }
+    }
+  </style>
+</head>
+<body>
+  <div class="blobs" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <div class="wrap shock" role="main" aria-live="assertive">
+    <div class="panel">
+      <div class="left">
+        <h1><span class="flash">⚠️ PHISHING ALERT</span></h1>
+        <div class="danger-meta">This QR leads to a suspicious destination. It may attempt to steal your info or install malware.</div>
+
+        <div class="meta-row" style="margin-top:16px">
+          <div class="count-bubble">You are visitor #<strong><%= count %></strong></div>
+          <div style="color:#ffb6b6">QR: <strong><%= qrId %></strong></div>
+          <div style="color:#ffdcdc">Scanned at: <%= datetime %></div>
+        </div>
+
+        <div class="url-preview" id="urlPreview">Destination: <span id="destUrl"><%= qrId %></span></div>
+
+        <div class="urgent">
+          <div class="timer" id="countdown">10</div>
+          <div style="flex:1">
+            <div style="font-weight:700; font-size:1.05rem">Leave this page immediately</div>
+            <div style="color:#ffdede; font-size:0.95rem">We strongly recommend you close the page or report this QR to your admin.</div>
+          </div>
+        </div>
+
+        <div class="row-btns">
+          <button class="big-cta" id="btnLeave">Leave Site (Close)</button>
+          <button class="report" id="btnReport">Report this QR</button>
+        </div>
+
+      </div>
+
+      <div class="right" aria-hidden="false">
+        <div>
+          <div class="info"><span class="k">Device:</span> <span id="deviceTxt">Detecting…</span></div>
+          <div class="info"><span class="k">Timezone:</span> <span id="tzTxt">Detecting…</span></div>
+          <div class="info"><span class="k">Language:</span> <span id="langTxt">Detecting…</span></div>
+          <div class="info"><span class="k">Location (IP):</span> <span id="locTxt"><%= location %></span></div>
+          <div class="info"><span class="k">Fingerprint:</span> <span id="fpTxt"><%= anonId.slice(0,12) %></span></div>
+          <% if (userName) { %>
+            <div class="info"><span class="k">Name (consented):</span> <strong><%= userName %></strong></div>
+          <% } %>
+        </div>
+
+        <div style="margin-top:18px">
+          <div style="font-size:0.9rem; color:#ffdede; margin-bottom:8px">Actions</div>
+          <button class="report" id="btnCopy">Copy URL</button>
+          <button class="report" id="btnSave">Save for later (Report)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="scareAudio" preload="auto">
+    <source src="/alarm.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- replace everything inside <script> ... </script> with this -->
+<script>
+(function(){
+  const ua = navigator.userAgent || '';
+  const isIPhone = /iPhone/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isChrome = /Chrome|CriOS/.test(ua);
+
+  let device = ua;
+  if (isIPhone && isSafari) device = 'iPhone 14, Safari browser';
+  else if (isIPhone) device = 'iPhone, Safari-like browser';
+  else if (isAndroid && isChrome) device = 'Android Phone, Chrome browser';
+  else if (isAndroid) device = 'Android Phone';
+  document.getElementById('deviceTxt').innerText = device;
+  document.getElementById('tzTxt').innerText = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown';
+  document.getElementById('langTxt').innerText = navigator.language || 'Unknown';
+
+  // show destination
+  const destEl = document.getElementById('destUrl');
+  destEl.innerText = window.location.href;
+  document.getElementById('urlPreview').title = 'Do not visit the destination if uncertain';
+
+  // make timer static “—”
+  document.getElementById('countdown').innerText = '—';
+
+  // Leave button -> open one of 10 random YouTube videos
+const leaveBtn = document.getElementById('btnLeave');
+leaveBtn.addEventListener('click', () => {
+  const audio = document.getElementById('scareAudio');
+  if (audio) audio.play().catch(() => {});
+
+  // List of 10 YouTube video URLs (replace with any videos you prefer)
+  const videos = [
+    'https://youtu.be/xvFZjo5PgG0?si=UoIOnumrcVbhd_4u', // example
+    'https://youtu.be/FzG4uDgje3M?si=kKDufMkR2p0AX85y',
+    'https://youtube.com/shorts/sNNwAZkr3cI?si=Yz8hRAX1acn6o-hF',
+    'https://youtube.com/shorts/5I1RGMVIMXs?si=nylY87MlWZqc9KcW',
+    'https://youtube.com/shorts/DRmFPo_lnh8?si=6c9ZGQ5rXKuvvQZs',
+    'https://youtube.com/shorts/53pZA_EQw7U?si=ZAMZMoZUxDGXs5fv',
+    'https://youtube.com/shorts/1i2G7Rt3CsE?si=H9y2Rb_fAE8vdnG9',
+    'https://youtube.com/shorts/ufrtGDos4jI?si=kumBhi0S0RPfOn2C',
+    'https://youtube.com/shorts/IL9rjdx0xuo?si=jrPukcvfpEcGCf3m',
+    'https://youtube.com/shorts/MoCq3C9ZJe8?si=OfLxd1pLM3OKozCG'
+  ];
+
+  // pick a random video
+  const idx = Math.floor(Math.random() * videos.length);
+  const chosen = videos[idx];
+
+  // open chosen video in new tab, then try to close or redirect current tab
+  window.open(chosen, '_blank');
+
+  // best-effort close current tab (may be blocked by browser)
+  try { window.close(); } catch (e) {}
+
+  // fallback: redirect current tab if close was blocked
+  setTimeout(() => { window.location.href = chosen; }, 300);
+});
+
+
+  // Copy URL
+  document.getElementById('btnCopy').addEventListener('click', async ()=>{
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('URL copied — you can report it to your admin.');
+    } catch(e){ alert('Copy failed.'); }
+  });
+
+  // Report via email
+  document.getElementById('btnReport').addEventListener('click', () => {
+  const currentUrl = window.location.href;
+  const reportUrl = '/report?q=' + encodeURIComponent(currentUrl);
+  window.open(reportUrl, '_blank');
+});
+
+  // Save for later
+  document.getElementById('btnSave').addEventListener('click', ()=>{
+    const data = {
+      url: window.location.href,
+      device: device,
+      time: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'suspicious-qr.json';
+    link.click();
+  });
+
+  // Optional: play alarm on first click
+  window.addEventListener('click', function once(){ 
+    const audio = document.getElementById('scareAudio');
+    if (audio) audio.play().catch(()=>{});
+    window.removeEventListener('click', once);
+  });
+})();
+</script>
+</body>
+</html>

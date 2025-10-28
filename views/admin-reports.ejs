@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin — Reports</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:Arial;margin:0;padding:18px;background:#f4f6fb}
+    .wrap{max-width:1100px;margin:18px auto}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    th,td{padding:10px;border-bottom:1px solid #edf0f5;text-align:left;font-size:13px}
+    th{background:#f7f9fc}
+    tr:last-child td{border-bottom:none}
+    .small{font-size:12px;color:#666}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Reports</h1>
+    <p class="small">Only visible to admins.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Time</th>
+          <th>QR</th>
+          <th>Reporter</th>
+          <th>Description</th>
+          <th>Anon ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reports.forEach(r => { %>
+          <tr>
+            <td><%= r.id %></td>
+            <td><%= new Date(r.created_at).toLocaleString() %></td>
+            <td><%= r.qr_link || r.qr_id || '-' %></td>
+            <td><%= r.reporter_name || r.reporter_email || '-' %></td>
+            <td style="max-width:480px;white-space:pre-wrap"><%= r.description %></td>
+            <td><%= r.anon_id ? r.anon_id.slice(0,12) : '-' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <p style="margin-top:12px"><a href="/admin/scans">Back to scans</a> | <a href="/admin/logout">Logout</a></p>
+  </div>
+</body>
+</html>

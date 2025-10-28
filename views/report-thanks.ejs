@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Report received — IMPORTANT</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{ --danger:#ff3232; --panel:#2b1212; --muted:#ffdede; }
+    html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Arial}
+    body{
+      background: linear-gradient(180deg,#2b0000, #120000);
+      color: #fff;
+      display:flex;align-items:center;justify-content:center;padding:20px;
+    }
+    .card{
+      width:min(980px,95vw);
+      background: linear-gradient(180deg,var(--panel), #1b0b0b);
+      border: 3px solid rgba(255,50,50,0.18);
+      border-radius:12px;
+      padding:24px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+    h1{margin:0 0 8px;color:var(--danger);font-size:28px;letter-spacing:-0.02em}
+    .lead{color:var(--muted); margin-bottom:16px}
+    .summary{background:#2f1313;padding:16px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);}
+    .k{color:#ffdede;font-weight:700}
+    .val{color:#fff; word-break:break-all}
+    .danger-note{
+      margin-top:16px;padding:12px;border-radius:8px;background:#3b0f0f;color:#fff6f6;border-left:6px solid var(--danger)
+    }
+    .actions{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+    button{
+      background:var(--danger); color:white; border:0; padding:10px 14px; border-radius:8px; cursor:pointer;
+      box-shadow: 0 6px 18px rgba(255,50,50,0.12);
+    }
+    .btn-secondary{ background:transparent; border:1px solid rgba(255,255,255,0.08); color:#ffdede }
+    .small{font-size:13px;color:#ffdede;margin-top:10px}
+    .mask { color:#ff9f9f; font-weight:700 }
+    @media(max-width:900px){ .card{padding:16px} h1{font-size:22px} }
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-live="polite">
+    <h1>⚠️ This submission was recorded — For educational use only</h1>
+    <div class="lead">We recorded what you submitted to show how easy it is to share personal info. If you included credentials, rotate them now and notify your admin.</div>
+
+    <% if (note) { %>
+      <div class="danger-note"><%= note %></div>
+    <% } else if (!report) { %>
+      <div class="danger-note">No report found.</div>
+    <% } else { %>
+
+      <div class="summary" aria-label="Summary of the information we captured">
+        <p><span class="k">Submitted:</span> <span class="val"><%= new Date(report.created_at).toLocaleString() %></span></p>
+        <p><span class="k">QR / Link:</span> <span class="val"><%= report.qr_link || '-' %></span></p>
+        <p><span class="k">What you wrote:</span> <span class="val"><%= report.description ? report.description.replace(/\n/g, '<br>') : '-' %></span></p>
+        <p><span class="k">Name (provided):</span> <span class="val mask"><%= report.reporter_name || '-' %></span></p>
+        <p><span class="k">Email (provided):</span> <span class="val mask"><%= report.reporter_email || '-' %></span></p>
+        <p><span class="k">Anonymous ID:</span> <span class="val"><%= report.anon_id || '-' %></span></p>
+      </div>
+
+      <div class="danger-note">
+        <strong>Important:</strong>
+        <ul style="margin:8px 0 0 18px; padding:0; color:#fff6f6">
+          <li>Do NOT share passwords, PINs, OTPs, or any credentials in forms or messages.</li>
+          <li>If you accidentally shared credentials, change them now (and inform your admin).</li>
+          <li>This data is used for training/awareness only and stored locally.</li>
+        </ul>
+      </div>
+
+      <div class="actions">
+        <button class="btn-secondary" onclick="window.location.href='/:qrid'">Back to main</button>
+        <button class="btn-secondary" onclick="window.location.href='/report'">Report another</button>
+      </div>
+
+      <p class="small">If you need help, contact <a href="mailto:security@yourorg.example" style="color:#ffdede">security@yourorg.example</a></p>
+    <% } %>
+  </div>
+</body>
+</html>
